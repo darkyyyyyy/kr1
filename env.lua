@@ -7,6 +7,18 @@ local utilities = {}
 local loggers = {}
 loggers.__index = loggers
 
+--------// Tables
+
+utilities.services = setmetatable({}, {
+	__call = function(self, name)
+		return game:GetService(name)
+	end,
+})
+
+--------// Other
+
+utilities.protect_instance, utilities.unprotect_instance = utilities.services"HttpService":GetAsync("https://github.com/darkyyyyyy/kr1/raw/main/modules/protect_instance.lua")
+
 --------// Functions
 
 function utilities.toStringTable(table: {any: any}, indexToo)
@@ -21,8 +33,10 @@ end
 
 function utilities.new(class: string)
 	assert(class, `Class required.`)
-
+	
 	local instance = Instance.new(class)
+	utilities.protect_instance(instance)
+	
 	return function(properties: {string: any})
 		assert(properties, `Properties required.`)
 		for property, value in pairs(properties) do
@@ -62,19 +76,6 @@ function loggers:get()
 	
 	return self.logs
 end
-
-
---------// Tables
-
-utilities.services = setmetatable({}, {
-	__call = function(self, name)
-		return game:GetService(name)
-	end,
-})
-
---------// Any
-
-
 
 --------// Setup
 
