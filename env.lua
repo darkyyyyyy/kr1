@@ -4,6 +4,8 @@
 local env = getfenv(2)
 local utilities = {}
 
+--------// Functions
+
 function utilities.new(class: string)
 	assert(class, `Class required.`)
 
@@ -17,8 +19,22 @@ function utilities.new(class: string)
 	end
 end
 
-for index: string, callback: (...any)->...any in pairs(utilities) do
-	env[index] = callback
+--------// Tables
+
+utilities.services = setmetatable({}, {
+	__call = function(self, name)
+		return game:GetService(name)
+	end,
+})
+
+--------// Any
+
+
+
+--------// Setup
+
+for index: string, any in pairs(utilities) do
+	env[index] = any
 end
 
 return true, env
